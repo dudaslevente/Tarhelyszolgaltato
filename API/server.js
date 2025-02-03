@@ -80,17 +80,90 @@ const Subscription = sequelize.define('Subscription', {
 sequelize.sync({ force: false });  // Avoid dropping tables on each restart
 
 // User registration route
+// User registration route with database creation
 app.post('/register', async (req, res) => {
-  try {
-    const { name, email, password, domain } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ name, email, password: hashedPassword, domain });
-    res.status(201).json(user);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
+    try {
+      const { name, email, password, domain } = req.body;
+      const hashedPassword = await bcrypt.hash(password, 10);
+  
+      // Generate the database name based on the domain (e.g., www.dudasfc.hu -> 13af_dudasfc)
+      const dbName = `13af_${domain.replace(/\./g, '_')}`;
+  
+      // First, create the user in the Sequelize database
+      const user = await User.create({ name, email, password: hashedPassword, domain });
+  
+      
+  
+      connection.connect((err) => {
+        if (err) {
+          console.error('Error connecting to MySQL: ', err);
+          return res.status(500).json({ error: 'Error connecting to MySQL.' });
+        }
+  
+        // Create the database
+        connection.query(`CREATE DATABASE IF NOT EXISTS ${dbName}`, (err) => {
+          if (err) {
+            console.error('Error creating database: ', err);
+            connection.end();
+            return res.status(500).json({ error: 'Error creating database.' });
+          }
+  
+          // Create user for the new database
+          const dbUser = `13af_${domain.replace(/\./g, '_')}`;
+          const generatedPassword = Math.random().toString(36).slice(-8);
+  
+          connection.query(`CREATE USER IF NOT EXISTS '${dbUser}'@'localhost' IDENTIFIED BY '${generatedPassword}'`, (err) => {
+            if (err) {
+              console.error('Error creating user: ', err);
+              connection.end();
+              return res.status(500).json({ error: 'Error creating user.' });
+            }
+  
+            // Grant privileges to the new user on the created database
+            connection.query(`GRANT ALL PRIVILEGES ON ${dbName}.* TO '${dbUser}'@'localhost'`, (err) => {
+              if (err) {
+                console.error('Error granting privileges: ', err);
+                connection.end();
+                return res.status(500).json({ error: 'Error granting privileges.' });
+              }
+  
+              // Flush privileges
+              connection.query('FLUSH PRIVILEGES', (err) => {
+                connection.end();
+                if (err) {
+                  console.error('Error flushing privileges: ', err);
+                  return res.status(500).json({ error: 'Error flushing privileges.' });
+                }
+  
+                // Send email with database credentials
+                const transporter = nodemailer.createTransport({
+                  service: 'gmail',
+                  auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
+                });
+  
+                transporter.sendMail({
+                  from: process.env.EMAIL_USER,
+                  to: user.email,
+                  subject: 'Your Subscription and Database Information',
+                  text: `Your domain: ${domain}\nDatabase Name: ${dbName}\nDatabase User: ${dbUser}\nDatabase Password: ${generatedPassword}`
+                });
+  
+                // Respond with the user data (created user and database information)
+                res.status(201).json({
+                  user,
+                  message: `User registered and database ${dbName} created successfully.`
+                });
+              });
+            });
+          });
+        });
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'An error occurred during registration.' });
+    }
+  });
+  
 // Login route
 app.post('/login', async (req, res) => {
   try {
