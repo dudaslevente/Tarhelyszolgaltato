@@ -6,10 +6,12 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const mysql = require('mysql2');
 const { authenticate, authorizeAdmin } = require('./middleware/auth');  // Import the authentication middleware
+const cors = require('cors');
 
 // Initialize Express app
 const app = express();
 app.use(express.json());
+app.use(cors);
 
 // Check environment variables and log them for debugging
 console.log('Connecting to MySQL with the following config:');
@@ -180,7 +182,7 @@ app.post('/login', async (req, res) => {
 });
 
 // Get all packages
-app.get('/packages', async (req, res) => {
+app.get('/public/packages', async (req, res) => {
   const packages = await Package.findAll();
   res.json(packages);
 });

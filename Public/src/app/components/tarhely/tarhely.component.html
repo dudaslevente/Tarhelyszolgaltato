@@ -1,0 +1,18 @@
+<div>
+    <h1 class="mt-4 mb-4">Csomagok listája</h1>
+    <div class="row">
+        <div class="main">
+          <div class="col-md-6 col-lg-4 col-xl-3" *ngFor="let package of packages">
+            <div class="card mb-4">
+              <div class="card-body">
+                <h3 class="card-title">{{package.name}}</h3>
+                <hr>
+                <p class="card-text">{{package.description}}</p>
+                <hr>
+                <p class="card-text">Price: {{package.price}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
