@@ -1,0 +1,35 @@
+###test.rest
+POST http://localhost:3000/register
+Content-Type: application/json
+
+{
+    "name": "Test User02",
+    "email": "testuser02@gmail.com",
+    "password": "TestPassword123",
+    "domain": "newtestdomain02.com"
+}
+
+
+### LOGIN USER
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email": "testuser02@gmail.com",
+    "password": "TestPassword123"
+}
+### GET ALL PACKAGES
+GET http://localhost:3000/public/packages
+### SUBSCRIBE TO A PACKAGE
+POST http://localhost:3000/subscribe
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN
+
+{
+    "packageId": 1
+}
+### GET USER SUBSCRIPTION
+GET http://localhost:3000/my-subscription
+Authorization: Bearer YOUR_JWT_TOKEN
+
+
