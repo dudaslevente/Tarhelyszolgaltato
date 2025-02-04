@@ -1,6 +1,6 @@
 import {
   CommonModule
-} from "./chunk-YL4PDYQD.js";
+} from "./chunk-R76SRDM4.js";
 import {
   Component,
   Directive,
@@ -20,7 +20,7 @@ import {
   ɵɵprojection,
   ɵɵprojectionDef,
   ɵɵsetNgModuleScope
-} from "./chunk-4W46YXB2.js";
+} from "./chunk-ZLZCXQ77.js";
 
 // node_modules/@primeuix/utils/dom/index.mjs
 function hasClass(element, className) {
@@ -178,6 +178,26 @@ function relativePosition(element, target, gutter = true) {
 function isElement(element) {
   return typeof HTMLElement === "object" ? element instanceof HTMLElement : element && typeof element === "object" && element !== null && element.nodeType === 1 && typeof element.nodeName === "string";
 }
+function toElement(element) {
+  let target = element;
+  if (element && typeof element === "object") {
+    if (element.hasOwnProperty("current")) {
+      target = element.current;
+    } else if (element.hasOwnProperty("el")) {
+      if (element.el.hasOwnProperty("nativeElement")) {
+        target = element.el.nativeElement;
+      } else {
+        target = element.el;
+      }
+    }
+  }
+  return isElement(target) ? target : void 0;
+}
+function appendChild(element, child) {
+  const target = toElement(element);
+  if (target) target.appendChild(child);
+  else throw new Error("Cannot append " + child + " to " + element);
+}
 function setAttributes(element, attributes = {}) {
   if (isElement(element)) {
     const computedStyles = (rule, value) => {
@@ -212,8 +232,84 @@ function setAttributes(element, attributes = {}) {
     });
   }
 }
+function fadeIn(element, duration) {
+  if (element) {
+    element.style.opacity = "0";
+    let last = +/* @__PURE__ */ new Date();
+    let opacity = "0";
+    let tick = function() {
+      opacity = `${+element.style.opacity + ((/* @__PURE__ */ new Date()).getTime() - last) / duration}`;
+      element.style.opacity = opacity;
+      last = +/* @__PURE__ */ new Date();
+      if (+opacity < 1) {
+        !!window.requestAnimationFrame && requestAnimationFrame(tick) || setTimeout(tick, 16);
+      }
+    };
+    tick();
+  }
+}
+function findSingle(element, selector) {
+  return isElement(element) ? element.matches(selector) ? element : element.querySelector(selector) : null;
+}
+function focus(element, options) {
+  element && document.activeElement !== element && element.focus(options);
+}
+function getHeight(element) {
+  if (element) {
+    let height = element.offsetHeight;
+    let style = getComputedStyle(element);
+    height -= parseFloat(style.paddingTop) + parseFloat(style.paddingBottom) + parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
+    return height;
+  }
+  return 0;
+}
+function getOffset(element) {
+  if (element) {
+    let rect = element.getBoundingClientRect();
+    return {
+      top: rect.top + (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0),
+      left: rect.left + (window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0)
+    };
+  }
+  return {
+    top: "auto",
+    left: "auto"
+  };
+}
+function getOuterHeight(element, margin) {
+  if (element) {
+    let height = element.offsetHeight;
+    if (margin) {
+      let style = getComputedStyle(element);
+      height += parseFloat(style.marginTop) + parseFloat(style.marginBottom);
+    }
+    return height;
+  }
+  return 0;
+}
+function getWidth(element) {
+  if (element) {
+    let width = element.offsetWidth;
+    let style = getComputedStyle(element);
+    width -= parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) + parseFloat(style.borderLeftWidth) + parseFloat(style.borderRightWidth);
+    return width;
+  }
+  return 0;
+}
 function isTouchDevice() {
   return "ontouchstart" in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+}
+function remove(element) {
+  var _a;
+  if (element) {
+    if (!("remove" in Element.prototype)) (_a = element.parentNode) == null ? void 0 : _a.removeChild(element);
+    else element.remove();
+  }
+}
+function removeChild(element, child) {
+  const target = toElement(element);
+  if (target) target.removeChild(child);
+  else throw new Error("Cannot remove " + child + " from " + element);
 }
 function setAttribute(element, attribute = "", value) {
   if (isElement(element) && value !== null && value !== void 0) {
@@ -327,6 +423,17 @@ function equals(obj1, obj2, field) {
   if (field) return resolveFieldData(obj1, field) === resolveFieldData(obj2, field);
   else return deepEquals(obj1, obj2);
 }
+function findLastIndex(arr, callback) {
+  let index = -1;
+  if (isNotEmpty(arr)) {
+    try {
+      index = arr.findLastIndex(callback);
+    } catch (e) {
+      index = arr.lastIndexOf([...arr].reverse().find(callback));
+    }
+  }
+  return index;
+}
 function isObject(value, empty = true) {
   return value instanceof Object && value.constructor === Object && (empty || Object.keys(value).length !== 0);
 }
@@ -349,6 +456,9 @@ function isArray(value, empty = true) {
 }
 function isNumber(value) {
   return isNotEmpty(value) && !isNaN(value);
+}
+function isPrintableCharacter(char = "") {
+  return isNotEmpty(char) && char.length === 1 && !!char.match(/\S| /);
 }
 function matchRegex(str, regex) {
   if (regex) {
@@ -1399,22 +1509,37 @@ export {
   hasClass,
   addClass,
   removeClass,
+  getViewport,
+  getWindowScrollLeft,
+  getWindowScrollTop,
   absolutePosition,
   getOuterWidth,
   relativePosition,
+  appendChild,
   setAttributes,
+  fadeIn,
+  findSingle,
+  focus,
+  getHeight,
+  getOffset,
+  getOuterHeight,
+  getWidth,
   isTouchDevice,
+  remove,
+  removeChild,
   setAttribute,
   EventBus,
   isEmpty,
   isNotEmpty,
   equals,
+  findLastIndex,
   isObject,
   resolve,
   isString,
   getKeyValue,
   isArray,
   isNumber,
+  isPrintableCharacter,
   matchRegex,
   minifyCSS,
   toKebabCase,
@@ -1436,4 +1561,4 @@ export {
   TranslationKeys,
   TreeDragDropService
 };
-//# sourceMappingURL=chunk-2SKV2RVT.js.map
+//# sourceMappingURL=chunk-32BBQXPH.js.map

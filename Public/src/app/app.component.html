@@ -1,8 +1,9 @@
 <div class="container">
-
-  <router-outlet />
+  
   <app-header [title]="appName"></app-header>
-  <app-regist></app-regist>
-  <app-tarhely></app-tarhely>
+  <div class="menu">
+    <p-menubar [model]="items"></p-menubar>
+  </div>
+  <router-outlet />
   <app-footer [company]="company" [author]="author"></app-footer>
 </div>

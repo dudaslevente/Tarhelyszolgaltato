@@ -1,7 +1,27 @@
-h1{
-    margin-left: 40px;
+.container{
+    text-align: center;
 }
 
-.main{
-    margin-left: 40px;
+input{
+    background-color: gray;
+    margin: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+p-password{
+    background-color: gray;
+    margin: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+p-button{
+    background-color: gray;
+    margin: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid black;
 }
