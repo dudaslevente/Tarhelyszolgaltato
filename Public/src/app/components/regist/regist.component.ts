@@ -3,7 +3,6 @@ import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
-import { User } from '../../interfaces/user';
 import { ApiService } from '../../services/api.service';
 import { MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
@@ -17,65 +16,37 @@ import { CommonModule } from '@angular/common';
   providers: [MessageService]
 })
 export class RegistComponent {
+  name: string = '';
+  email: string = '';
+  password: string = '';
+  domain: string = '';
+
   constructor(
-    private api: ApiService, 
-    private messageService: MessageService
-  ) {}
-
-  invalidFields: string[] = [];
-
-  user: User = {
-    id: '',
-    name: '',
-    email: '',
-    password: '',
-    confirm: '',
-    role: 'user',
-    domain: ''
-  };
+    private api: ApiService
+  ){}
 
   registration() {
-    if (this.invalidFields.length > 0) {
-      this.messageService.add({ severity: 'error', summary: 'Validation Error', detail: 'Minden mező kitöltése kötelező!' });
+    if (!this.name || !this.email || !this.password || !this.domain) {
+      console.error("Minden mezőt ki kell tölteni!");
       return;
     }
-
-    // Jelszavak egyezésének ellenőrzése
-    if (this.user.password !== this.user.confirm) {
-      this.messageService.add({ severity: 'error', summary: 'Password Mismatch', detail: 'A jelszavak nem egyeznek!' });
-      this.invalidFields.push('password');
-      return;
-    }
-
-    // API hívás az adatok adatbázisba küldésére
-    this.api.registration('users', this.user).subscribe({
-      next: (res: any) => {
-        this.invalidFields = res.invalid || [];
-        if (this.invalidFields.length === 0) {
-          this.messageService.add({ severity: 'success', summary: 'Sikeres regisztráció!', detail: 'A fiókod elkészült!' });
-
-          // Mezők törlése sikeres regisztráció után
-          this.user = {
-            id: '',
-            name: '',
-            email: '',
-            password: '',
-            confirm: '',
-            role: 'user',
-            domain: ''
-          };
-        } else {
-          this.messageService.add({ severity: 'error', summary: 'HIBA', detail: res.message });
-        }
+  
+    const Data = {
+      name: this.name,
+      email: this.email,
+      password: this.password,
+      domain: this.domain
+    };
+  
+    this.api.registration(Data).subscribe({
+      next: (res) => {
+        console.log("Sikeres regisztráció:", res);
+        alert("Sikeres regisztráció:")
       },
-      error: (error) => {
-        console.error('Server Error:', error);
-        this.messageService.add({ severity: 'error', summary: 'Szerverhiba', detail: 'Nem sikerült a regisztráció, próbáld újra!' });
+      error: (err) => {
+        console.error("Hiba a regisztrációnál:", err);
+        alert("Hiba a regisztrációnál:")
       }
     });
-  }
-
-  isInvalid(field: string) {
-    return this.invalidFields.includes(field);
   }
 }

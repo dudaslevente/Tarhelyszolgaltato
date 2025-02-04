@@ -1,1 +1,12 @@
-<p>login works!</p>
+<div class="container">
+    <h1>Bejelentkezés</h1>
+    <div class="main">
+        <input type="email" id="email" name="email" pInputText [(ngModel)]="email" placeholder="Enter your email" autocomplete="email"/>
+        <br>
+        <p-password [(ngModel)]="password" [feedback]="false" inputId="password"name="password" placeholder="Enter password" autocomplete="new-password"></p-password>
+        <br>
+        <div class="button">
+            <p-button class="button" label="Login" (click)="login()"/>
+        </div>
+    </div>
+</div>

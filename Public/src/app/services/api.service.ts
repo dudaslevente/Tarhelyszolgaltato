@@ -36,7 +36,11 @@ export class ApiService {
     return this.http.post(`${this.server}/upload/${id}`, form);
   }
 
-  registration(table:string, data: object) {
-    return this.http.post(this.server + '/register' + table, data);
+  registration(data: object) {
+    return this.http.post(this.server + '/register', data);
+  }
+
+  login(data:object){
+    return this.http.post(this.server + '/login/', data);
   }
 }

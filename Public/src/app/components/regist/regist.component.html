@@ -1,53 +1,15 @@
 <div class="container">
-    <h1 class="mt-4 mb-4">Regisztráció</h1>
+    <h1>Regisztráció</h1>
     <div class="main">
-        <input 
-            type="text" 
-            id="name" 
-            name="name" 
-            pInputText 
-            [(ngModel)]="user.name" 
-            placeholder="Enter your name" 
-            autocomplete="name"
-        />
+        <input type="text" id="name" name="name" pInputText [(ngModel)]="name" placeholder="Enter your name" autocomplete="name"/>
         <br>
-
-        <input 
-            type="email" 
-            id="email" 
-            name="email" 
-            pInputText 
-            [(ngModel)]="user.email" 
-            placeholder="Enter your email" 
-            autocomplete="email"
-        />
+        <input type="email" id="email" name="email" pInputText [(ngModel)]="email" placeholder="Enter your email" autocomplete="email"/>
         <br>
-
-        <p-password 
-            [(ngModel)]="user.password" 
-            [feedback]="false" 
-            inputId="password"
-            name="password"     
-            placeholder="Enter password" 
-            autocomplete="new-password"
-        ></p-password>
+        <p-password [(ngModel)]="password" [feedback]="false" inputId="password"name="password" placeholder="Enter password" autocomplete="new-password"></p-password>
         <br>
-
-        <input 
-            type="text" 
-            id="domain" 
-            name="domain" 
-            pInputText 
-            [(ngModel)]="user.domain" 
-            placeholder="Enter domain name" 
-            autocomplete="organization"
-        />
+        <input type="text" id="domain" name="domain" pInputText [(ngModel)]="domain" placeholder="Enter domain name" autocomplete="organization"/>
         <br>
-
-        <p-button 
-            label="Regisztráció" 
-            class="btn btn-primary mb-3" 
-            (click)="registration()"
-        ></p-button>
+        
+        <p-button label="Regisztráció" (click)="registration()"></p-button>
     </div>
 </div>
