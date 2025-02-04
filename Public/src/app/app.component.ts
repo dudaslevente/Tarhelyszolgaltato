@@ -7,6 +7,7 @@ import { RegistComponent } from "./components/regist/regist.component";
 
 @Component({
     selector: 'app-root',
+    standalone:true,
     imports: [RouterOutlet, TarhelyComponent, HeaderComponent, FooterComponent, RegistComponent],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'

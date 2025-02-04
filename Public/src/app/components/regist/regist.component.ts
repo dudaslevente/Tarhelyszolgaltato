@@ -5,7 +5,8 @@ import { PasswordModule } from 'primeng/password';
 
 @Component({
   selector: 'app-regist',
-  imports: [FormsModule, InputTextModule, PasswordModule],
+  standalone:true,
+  imports: [FormsModule,InputTextModule,PasswordModule],
   templateUrl: './regist.component.html',
   styleUrl: './regist.component.scss'
 })

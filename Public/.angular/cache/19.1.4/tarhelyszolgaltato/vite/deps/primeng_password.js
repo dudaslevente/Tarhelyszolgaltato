@@ -1,15 +1,6 @@
 import {
   InputText
-} from "./chunk-PGM2YA3L.js";
-import {
-  NG_VALUE_ACCESSOR
-} from "./chunk-F6CQNIHQ.js";
-import {
-  animate,
-  style,
-  transition,
-  trigger
-} from "./chunk-UHVAZUTN.js";
+} from "./chunk-XGZWKBQO.js";
 import {
   BaseComponent,
   BaseStyle
@@ -29,6 +20,15 @@ import {
   removeClass,
   uuid
 } from "./chunk-2SKV2RVT.js";
+import {
+  animate,
+  style,
+  transition,
+  trigger
+} from "./chunk-UHVAZUTN.js";
+import {
+  NG_VALUE_ACCESSOR
+} from "./chunk-F6CQNIHQ.js";
 import {
   CommonModule,
   DOCUMENT,
