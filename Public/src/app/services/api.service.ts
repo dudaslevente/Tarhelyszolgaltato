@@ -44,7 +44,7 @@ export class ApiService {
     return this.http.post(this.server + '/login/', data);
   }
 
-  subscription(data:object){
-    return this.http.post(this.server + '/subscribe/', data);
+  subscriptions(data:object){
+    return this.http.post(this.server + '/subscriptions/', data);
   }
 }

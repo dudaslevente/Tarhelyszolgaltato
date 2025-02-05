@@ -20,7 +20,7 @@ export class SubscriptionsComponent {
 
   domain: string = '';
 
-  subscription() {
+  subscriptions() {
     if (!this.domain) {
       console.error("Minden mezőt ki kell tölteni!");
       return;
@@ -30,13 +30,13 @@ export class SubscriptionsComponent {
       domain: this.domain,
     };
   
-    this.api.subscription(Data).subscribe({
+    this.api.subscriptions(Data).subscribe({
       next: (res) => {
         console.log("Sikeres előfizetés:", res);
         alert("Sikeres előfizetés:")
       },
       error: (err) => {
-        console.error("Hiba a előfizetés:", err);
+        console.error("Hiba a előfizetésnél:", err);
         alert("Hiba a előfizetésnél:")
       }
     });
