@@ -19,14 +19,13 @@ export class RegistComponent {
   name: string = '';
   email: string = '';
   password: string = '';
-  domain: string = '';
 
   constructor(
     private api: ApiService
   ){}
 
   registration() {
-    if (!this.name || !this.email || !this.password || !this.domain) {
+    if (!this.name || !this.email || !this.password) {
       console.error("Minden mezőt ki kell tölteni!");
       return;
     }
@@ -35,7 +34,6 @@ export class RegistComponent {
       name: this.name,
       email: this.email,
       password: this.password,
-      domain: this.domain
     };
   
     this.api.registration(Data).subscribe({

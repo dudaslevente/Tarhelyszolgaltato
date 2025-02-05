@@ -3,15 +3,16 @@ import { Component, OnInit } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { ApiService } from '../../services/api.service';
 import { Package } from '../../interfaces/packages';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-tarhely',
+  selector: 'app-package',
   standalone: true,
-  imports: [CardModule, CommonModule],
-  templateUrl: './tarhely.component.html',
-  styleUrl: './tarhely.component.scss'
+  imports: [CardModule, CommonModule, RouterLink],
+  templateUrl: './package.component.html',
+  styleUrl: './package.component.scss'
 })
-export class TarhelyComponent implements OnInit{
+export class PackageComponent implements OnInit{
 
   constructor(private api: ApiService){}
 

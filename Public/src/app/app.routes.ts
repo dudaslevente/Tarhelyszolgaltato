@@ -1,7 +1,8 @@
 import { Routes } from '@angular/router';
 import { RegistComponent } from './components/regist/regist.component';
 import { LoginComponent } from './components/login/login.component';
-import { TarhelyComponent } from './components/tarhely/tarhely.component';
+import { SubscriptionsComponent } from './components/subscriptions/subscriptions.component';
+import { PackageComponent } from './components/package/package.component';
 
 export const routes: Routes = [
     {
@@ -11,6 +12,9 @@ export const routes: Routes = [
         path: 'login', component: LoginComponent
     },
     {
-        path: 'tarhely', component: TarhelyComponent
+        path: 'package', component: PackageComponent
+    },
+    {
+        path: 'package/:id', component: SubscriptionsComponent
     },
 ];

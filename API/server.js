@@ -129,4 +129,33 @@ app.post('/register-domain', authenticate, async (req, res) => {
   }
 });
 
+// Get all packages
+app.get('/public/packages', async (req, res) => {
+  const packages = await Package.findAll();
+  res.json(packages);
+});
+
+app.post('/subscribe', authenticate, async (req, res) => {
+  try {
+    const { packageId } = req.body;
+    const user = await User.findByPk(req.user.id);
+    if (!user) {
+      console.error('Subscription failed: User not found.');
+      return res.status(404).json({ error: 'User not found!' });
+    }
+    const existingSubscription = await Subscription.findOne({ where: { userId: user.id } });
+    if (existingSubscription) {
+      console.error(`Subscription failed for user ${user.email}: Already subscribed.`);
+      return res.status(400).json({ error: 'You already have an active subscription!' });
+    }
+    // Save new subscription
+    const subscription = await Subscription.create({ userId: user.id, packageId });
+    console.log(`User ${user.email} subscribed to package ${packageId}.`);
+    res.json(subscription);
+  } catch (error) {
+    console.error('Subscription error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

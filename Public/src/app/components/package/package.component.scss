@@ -15,7 +15,7 @@
 }
 
 .card-body{
-    background-color: gray;
+    background-color: lightgray;
     padding: 30px;
     margin: 10px;
     border-radius: 10px;
@@ -29,4 +29,14 @@ h1{
 
 p{
     font-size: large;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+.button{
+    border: 1px solid black;
+    background-color: gray;
 }

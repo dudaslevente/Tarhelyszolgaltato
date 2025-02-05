@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [InputTextModule, PasswordModule, ButtonModule, CommonModule, FormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
@@ -38,7 +39,7 @@ export class LoginComponent {
         console.log(" Sikeres bejelentkezés:", res);
         alert("Sikeres bejelentkezés!");
 
-        this.router.navigate(['/tarhely']);
+        this.router.navigate(['/package']);
       },
       error: (err) => {
         console.error(" Hiba a bejelentkezésnél:", err);

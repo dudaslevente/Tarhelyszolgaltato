@@ -43,4 +43,8 @@ export class ApiService {
   login(data:object){
     return this.http.post(this.server + '/login/', data);
   }
+
+  subscription(data:object){
+    return this.http.post(this.server + '/subscribe/', data);
+  }
 }

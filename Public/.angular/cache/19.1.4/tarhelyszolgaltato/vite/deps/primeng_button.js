@@ -1,11 +1,11 @@
 import {
+  AutoFocus
+} from "./chunk-RSYLHU23.js";
+import {
   Badge,
   BadgeModule,
   Ripple
 } from "./chunk-SQDMUOCV.js";
-import {
-  AutoFocus
-} from "./chunk-RSYLHU23.js";
 import {
   SpinnerIcon
 } from "./chunk-3RTF4N6A.js";
