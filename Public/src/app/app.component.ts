@@ -13,29 +13,44 @@ import { AuthService } from './services/auth.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   appName = 'Tárhelyszolgáltató';
   company = 'Bajai SZC - Türr István Technikum';
   author = '13.a Szoftverfejlesztő';
 
-  constructor(private auth:AuthService){}
+  constructor(private auth: AuthService) {}
 
-  items:MenuItem[] = [];
+  items: MenuItem[] = [];
 
   ngOnInit(): void {
-    this.auth.isLoggedIn$.subscribe(res => {
-      this.setupMenu(res);
+    this.auth.isLoggedIn$.subscribe(() => {
+      this.setupMenu();
     });
   }
 
-  setupMenu(isLoggedIn: boolean) {
-    this.items = [
-        ...(isLoggedIn ? [
-            { label: "Kilépés", url: '/logout' }
-        ] : [
-            { label: "Belépés", routerLink: ['/login'] },
-            { label: "Regisztráció", routerLink: ['/'] }
-        ])
-    ];
+  setupMenu() {
+    if (this.auth.isLoggedUser()) {
+      this.items = [
+        {
+          label: 'Csomagválasztó',
+          routerLink: '/package'
+        },
+        {
+          label: 'Kijelentkezés',
+          routerLink: '/logout'
+        }
+      ];
+    } else {
+      this.items = [
+        {
+          label: 'Regisztráció',
+          routerLink: '/register'
+        },
+        {
+          label: 'Bejelentkezés',
+          routerLink: '/login'
+        }
+      ];
+    }
   }
 }

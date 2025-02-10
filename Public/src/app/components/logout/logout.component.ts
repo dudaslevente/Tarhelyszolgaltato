@@ -8,15 +8,15 @@ import { MessageService } from 'primeng/api';
   standalone: true,
   imports: [],
   templateUrl: './logout.component.html',
-  styleUrl: './logout.component.scss'
+  styleUrls: ['./logout.component.scss'],
+  providers: [MessageService]
 })
-export class LogoutComponent implements OnInit{
+export class LogoutComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private router: Router,
-    private messageService: MessageService,
-
-  ){}
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
     this.auth.logout();

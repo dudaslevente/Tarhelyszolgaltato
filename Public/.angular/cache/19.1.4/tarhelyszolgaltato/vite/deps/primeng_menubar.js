@@ -1,13 +1,11 @@
 import {
+  zindexutils
+} from "./chunk-6EUKM3X6.js";
+import {
   RouterLink,
   RouterLinkActive,
   RouterModule
 } from "./chunk-X6O4ZHCW.js";
-import {
-  zindexutils
-} from "./chunk-6EUKM3X6.js";
-import "./chunk-CDSKFS7S.js";
-import "./chunk-DRVZO2EU.js";
 import {
   Badge,
   BadgeModule,
@@ -45,6 +43,8 @@ import {
   resolve,
   uuid
 } from "./chunk-GMQDSUWN.js";
+import "./chunk-CDSKFS7S.js";
+import "./chunk-DRVZO2EU.js";
 import {
   CommonModule,
   DOCUMENT,
