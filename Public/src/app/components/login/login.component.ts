@@ -6,6 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,8 @@ export class LoginComponent {
 
   constructor(
       private api: ApiService,
-      private router: Router
+      private router: Router,
+      private auth: AuthService
   ){}
 
   login() {
@@ -35,8 +37,9 @@ export class LoginComponent {
     };
 
     this.api.login(Data).subscribe({
-      next: (res) => {
+      next: (res:any) => {
         console.log(" Sikeres bejelentkezés:", res);
+        this.auth.login(res.token);
         alert("Sikeres bejelentkezés!");
 
         this.router.navigate(['/package']);

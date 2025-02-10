@@ -28,20 +28,14 @@ export class AppComponent implements OnInit{
     });
   }
 
-  setupMenu(isLoggedIn:boolean){
+  setupMenu(isLoggedIn: boolean) {
     this.items = [
-      ...(isLoggedIn) ? [
-        ...(this.auth.isAdmin()) ? [
-          { label: "Kilépés", url: '/logout' }
+        ...(isLoggedIn ? [
+            { label: "Kilépés", url: '/logout' }
         ] : [
-          { label: "Packages", url: '/packages' },
-          { label: "Kilépés", url: '/logout' }
-        ]
-
-      ] : [
-        { label: "Belépés", url: '/login' },
-        { label: "Regisztráció", url: '/'}
-      ]
+            { label: "Belépés", routerLink: ['/login'] },
+            { label: "Regisztráció", routerLink: ['/'] }
+        ])
     ];
   }
 }

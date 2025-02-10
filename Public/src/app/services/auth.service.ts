@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, retry } from 'rxjs';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class AuthService {
 
   constructor() { }
 
-  private tokenName = 'tarhelyszolgaltato';
+  private tokenName = environment.tokenName;
 
   private isLoggedIn = new BehaviorSubject<boolean>(this.hasToken());
   isLoggedIn$: Observable<boolean> = this.isLoggedIn.asObservable();
@@ -19,12 +20,12 @@ export class AuthService {
   }
 
   login(token:string){
-    localStorage.setItem(this.tokenName, token);
+    localStorage.setItem(environment.tokenName, token);
     this.isLoggedIn.next(true);
   }
 
   logout(){
-    localStorage.removeItem(this.tokenName);
+    localStorage.removeItem(environment.tokenName);
     this.isLoggedIn.next(false);
   }
 

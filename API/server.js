@@ -135,10 +135,10 @@ app.get('/public/packages', async (req, res) => {
   res.json(packages);
 });
 
-app.post('/subscribe', authenticate, async (req, res) => {
+app.post('/subscriptions', async (req, res) => {
   try {
-    const { packageId } = req.body;
-    const user = await User.findByPk(req.user.id);
+    const { packageId, userId, domain } = req.body;
+    const user = await User.findByPk(userId);
     if (!user) {
       console.error('Subscription failed: User not found.');
       return res.status(404).json({ error: 'User not found!' });
@@ -149,7 +149,7 @@ app.post('/subscribe', authenticate, async (req, res) => {
       return res.status(400).json({ error: 'You already have an active subscription!' });
     }
     // Save new subscription
-    const subscription = await Subscription.create({ userId: user.id, packageId });
+    const subscription = await Subscription.create({ userId: user.id, packageId, domain });
     console.log(`User ${user.email} subscribed to package ${packageId}.`);
     res.json(subscription);
   } catch (error) {
