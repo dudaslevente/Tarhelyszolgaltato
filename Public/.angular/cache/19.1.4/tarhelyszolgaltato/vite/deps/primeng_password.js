@@ -8,6 +8,12 @@ import {
   NG_VALUE_ACCESSOR
 } from "./chunk-YB7DT32W.js";
 import {
+  animate,
+  style,
+  transition,
+  trigger
+} from "./chunk-2LJPREAG.js";
+import {
   AutoFocus
 } from "./chunk-HFGLKA6J.js";
 import {
@@ -34,12 +40,6 @@ import {
   relativePosition,
   removeClass
 } from "./chunk-GMQDSUWN.js";
-import {
-  animate,
-  style,
-  transition,
-  trigger
-} from "./chunk-2LJPREAG.js";
 import {
   CommonModule,
   NgClass,

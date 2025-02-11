@@ -23,32 +23,31 @@ export class SubscriptionsComponent {
   ){}
 
   domain: string = '';
-
   subscriptions() {
     if (!this.domain) {
       console.error("Minden mezőt ki kell tölteni!");
       return;
     }
-
+  
     const packageId = this.activated.snapshot.params["id"];
     const user = this.auth.loggedUser();
-    console.log(user)
     const Data = {
       domain: this.domain,
       userId: user.id,
       packageId: packageId
     };
   
-    console.log(Data)
+    console.log(Data);
     this.api.subscriptions(Data).subscribe({
       next: (res) => {
         console.log("Sikeres előfizetés:", res);
-        alert("Sikeres előfizetés:")
+        alert("Sikeres előfizetés!");
       },
       error: (err) => {
         console.error("Hiba a előfizetésnél:", err);
-        alert("Hiba a előfizetésnél:")
+        alert("Hiba a előfizetésnél!");
       }
     });
   }
+  
 }

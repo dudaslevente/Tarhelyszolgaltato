@@ -74,6 +74,89 @@ app.post('/login', async (req, res) => {
   }
 });
 
+// Get all packages
+app.get('/public/packages', async (req, res) => {
+  const packages = await Package.findAll();
+  res.json(packages);
+});
+app.post('/subscriptions', async (req, res) => {
+  try {
+    const { packageId, userId, domain } = req.body;
+    
+    const user = await User.findByPk(userId);
+    if (!user) {
+      console.error('Subscription failed: User not found.');
+      return res.status(404).json({ error: 'User not found!' });
+    }
+
+    // Check if the user already has an active subscription
+    const existingSubscription = await Subscription.findOne({ where: { userId: user.id } });
+    if (existingSubscription) {
+      console.error(`Subscription failed for user ${user.email}: Already subscribed.`);
+      return res.status(400).json({ error: 'You already have an active subscription!' });
+    }
+
+    // Check for the selected package
+    const selectedPackage = await Package.findByPk(packageId);
+    if (!selectedPackage) {
+      return res.status(400).json({ error: 'Invalid package selection.' });
+    }
+
+    // Create the database name from the domain
+    const dbName = `db_${domain.replace(/\./g, '_')}`;
+
+    // Create a connection to the MySQL server
+    const connection = mysql.createConnection({
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS
+    });
+
+    connection.connect((err) => {
+      if (err) return res.status(500).json({ error: 'Database connection error.' });
+
+      // Create the database if it doesn't exist
+      connection.query(`CREATE DATABASE IF NOT EXISTS ${dbName}`, (err) => {
+        if (err) return res.status(500).json({ error: 'Error creating database.' });
+
+        // Grant privileges to the user for the new database
+        connection.query(`GRANT ALL PRIVILEGES ON ${dbName}.* TO '${process.env.DB_USER}'@'localhost'`, (err) => {
+          connection.end();
+          if (err) return res.status(500).json({ error: 'Error granting privileges.' });
+
+          // Save the new subscription in the database
+          Subscription.create({ userId: user.id, packageId, domain }).then(subscription => {
+            console.log(`User ${user.email} subscribed to package ${packageId}.`);
+
+            // Optionally, send an email with subscription details like in register-domain route
+            const transporter = nodemailer.createTransport({
+              service: 'gmail',
+              auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
+            });
+
+            const mailOptions = {
+              from: process.env.EMAIL_USER,
+              to: user.email,
+              subject: 'Your Subscription Details',
+              text: `Your domain: ${domain}\nDatabase Name: ${dbName}\nPackage: ${selectedPackage.name}`
+            };
+
+            transporter.sendMail(mailOptions, (error, info) => {
+              if (error) console.error('Error sending email:', error);
+            });
+
+            res.json(subscription);
+          });
+        });
+      });
+    });
+  } catch (error) {
+    console.error('Subscription error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/*
 app.post('/register-domain', authenticate, async (req, res) => {
   try {
     const { domain, packageId } = req.body;
@@ -129,11 +212,6 @@ app.post('/register-domain', authenticate, async (req, res) => {
   }
 });
 
-// Get all packages
-app.get('/public/packages', async (req, res) => {
-  const packages = await Package.findAll();
-  res.json(packages);
-});
 
 app.post('/subscriptions', async (req, res) => {
   try {
@@ -157,5 +235,6 @@ app.post('/subscriptions', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+*/
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
